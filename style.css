@@ -1,0 +1,36 @@
+/*input*/
+#input label {
+    margin: 0 10px 10px 0;
+}
+
+#input .form-control {
+    width: 150px;
+}
+
+/*percentage*/
+#percentage .percentage-block {
+    display: inline-block;
+    height: 140px;
+    width: 140px;
+    margin: 10px;
+    text-align: center;
+}
+
+#percentage .percentage-block img {
+    width: 120px;
+    height: 120px;
+    border-radius: 60px;
+}
+
+#percentage .percentage-block p {
+    font-size: 22px;
+}
+
+/*log*/
+#log h2 {
+    margin-bottom: 0;
+}
+
+#log table {
+    width: 100%;
+}
