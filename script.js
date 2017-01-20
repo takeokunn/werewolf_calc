@@ -27,9 +27,6 @@ const addTableColumn = function(id, role, battle) {
             <td>
                 ${battle}
             </td>
-            <td>
-                <input id="${id}" type="button" class="btn btn-danger btn-sm" value="削除">
-            </td>
         </tr>
     `;
     $('table > tbody tr:first').before(tbl);
