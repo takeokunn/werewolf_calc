@@ -16,8 +16,27 @@ const isWin = {
 }
 
 const addTableColumn = function(id, role, battle) {
-    const tbl = '<tr><td>' + id + '</td><td>' + role + '</td><td>' + battle + '</td></tr>';
+    const tbl = `
+        <tr>
+            <td>
+                ${id}
+            </td>
+            <td>
+                ${role}
+            </td>
+            <td>
+                ${battle}
+            </td>
+            <td>
+                <input id="${id}" type="button" class="btn btn-danger btn-sm" value="削除">
+            </td>
+        </tr>
+    `;
     $('table > tbody tr:first').before(tbl);
+};
+
+const removeTableColumn = function(id) {
+
 }
 
 const adaptPercentage = function() {
@@ -46,7 +65,6 @@ const adaptPercentage = function() {
             break;
         }
     });
-
     $('#percentage-murabito').text(Math.floor(murabito / length * 100) + '%');
     $('#percentage-jinrou').text(Math.floor(jinrou / length * 100) + '%');
     $('#percentage-kaitou').text(Math.floor(kaitou / length * 100) + '%');
@@ -59,7 +77,6 @@ const adaptPercentage = function() {
 $('.form-control').change(function() {
     const input_role = $('#role').val();
     const input_battle = $('#battle').val();
-
     if(input_role == 0 || input_battle == 0) {
         $("#add").prop("disabled", true);
     }
@@ -69,7 +86,7 @@ $('.form-control').change(function() {
 })
 
 // form
-$('#add').click(function() {
+$('#add').on('click', function() {
     const input_role = $('#role').val();
     const input_battle = $('#battle').val();
     addTableColumn(id, role[input_role], isWin[input_battle]);
@@ -80,4 +97,9 @@ $('#add').click(function() {
     });
     id++;
     adaptPercentage();
+});
+
+// delete
+$('tbody').on('click', '.btn-danger', function() {
+    console.log($(this)[0].id)
 });
