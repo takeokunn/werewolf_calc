@@ -20,28 +20,28 @@
     <div class="container">
 
         <!-- 入力ブロック -->
-        <div id='input' class="col-md-12 form-group">
+        <div id="input" class="col-md-12 form-group">
             <label>
                 役割：
                 <select class="form-control" name="role" id="role">
                     <option value="0"></option>
-                    <option value="1">村人</option>
-                    <option value="2">人狼</option>
-                    <option value="3">怪盗</option>
-                    <option value="4">狂人</option>
-                    <option value="5">占い師</option>
-                    <option value="5">てるてる</option>
+                    <option value="murabito">村人</option>
+                    <option value="jinrou">人狼</option>
+                    <option value="kaitou">怪盗</option>
+                    <option value="kyoujin">狂人</option>
+                    <option value="uranaishi">占い師</option>
+                    <option value="teruteru">てるてる</option>
                 </select>
             </label>
             <label>
                 勝敗：
-                <select class="form-control" name="win" id="win">
+                <select class="form-control" name="battle" id="battle">
                     <option value="0"></option>
                     <option value="1">win</option>
                     <option value="2">lose</option>
                 </select>
             </label>
-            <input type="button" class="btn btn-primary" value="追加">
+            <input id="add" type="button" class="btn btn-primary" value="追加" disabled>
         </div>
 
         <!-- 勝率ブロック -->
@@ -49,29 +49,30 @@
             <h2>勝率</h2>
             <div class="percentage-block">
                 <img src="./icon.png" alt="murabito">
-                <p>53%</p>
+                <p id="percentage-murabito">0%</p>
             </div>
             <div class="percentage-block">
                 <img src="./icon.png" alt="jinrou">
-                <p>53%</p>
+                <p id="percentage-jinrou">0%</p>
             </div>
             <div class="percentage-block">
                 <img src="./icon.png" alt="kaitou">
-                <p>53%</p>
+                <p id="percentage-kaitou">0%</p>
             </div>
             <div class="percentage-block">
                 <img src="./icon.png" alt="kyoujin">
-                <p>53%</p>
+                <p id="percentage-kyoujin">0%</p>
             </div>
             <div class="percentage-block">
                 <img src="./icon.png" alt="uranaishi">
-                <p>53%</p>
+                <p id="percentage-uranaishi">0%</p>
             </div>
             <div class="percentage-block">
                 <img src="./icon.png" alt="teruteru">
-                <p>53%</p>
+                <p id="percentage-teruteru">0%</p>
             </div>
         </div>
+
         <!-- Logブロック -->
         <div id="log" class="col-md-6">
             <h2>ログ</h2>
@@ -83,27 +84,8 @@
                         <th>勝敗</th>
                     </tr>
                 </thead>
+                    <tr></tr>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>怪盗</td>
-                        <td>lose</td>
-                  　　</tr>
-                  <tr>
-                        <td>2</td>
-                        <td>村人</td>
-                        <td>win</td>
-                  　　</tr>
-                  <tr>
-                        <td>3</td>
-                        <td>狂人</td>
-                        <td>win</td>
-                  　　</tr>
-                  <tr>
-                        <td>4</td>
-                        <td>てるてる</td>
-                        <td>win</td>
-                  　　</tr>
                 </tbody>
             </table>
         </div>
