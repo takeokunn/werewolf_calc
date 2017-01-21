@@ -29,11 +29,11 @@ const addTableColumn = function(id, role, battle) {
             </td>
         </tr>
     `;
-    $('table > tbody tr:first').before(tbl);
+    $('table > tbody > tr:first').before(tbl);
 };
 
 const removeAllTableColumn = function() {
-    $('table > tbody').remove();
+    $('table > tbody > tr').remove();
     $('table > tbody').append('<tr></tr>');
 }
 
