@@ -36,38 +36,48 @@ const removeTableColumn = function(id) {
 
 }
 
+const calcPercent = function(win_num, sum_sum) {
+    var tmp = Math.floor(win_num / sum_sum * 100);
+    return isNaN(tmp)? 0 + '%' : tmp + '%';
+}
+
 const adaptPercentage = function() {
     var murabito = jinrou = kaitou = kyoujin = uranaishi = teruteru = 0;
-    const length = state_array.length;
+    var murabito_sum = jinrou_sum = kaitou_sum = kyoujin_sum = uranaishi_sum = teruteru_sum = 0;
     state_array.map(function(x) {
-        if(isWin[x.battle] === 'lose') return;
         switch (x.role) {
         case 'murabito':
-            murabito++;
+            murabito_sum++;
+            if(isWin[x.battle] === 'win') murabito++;
             break;
         case 'jinrou':
-            jinrou++;
+            jinrou_sum++;
+            if(isWin[x.battle] === 'win') jinrou++;
             break;
         case 'kaitou':
-            kaitou++;
+            kaitou_sum++;
+            if(isWin[x.battle] === 'win') kaitou++;
             break;
         case 'kyoujin':
-            kyoujin++;
+            kyoujin_sum++;
+            if(isWin[x.battle] === 'win') kyoujin++;
             break;
         case 'uranaishi':
-            uranaishi++;
+            uranaishi_sum++;
+            if(isWin[x.battle] === 'win') uranaishi++;
             break;
         case 'teruteru':
-            teruteru++;
+            teruteru_sum++;
+            if(isWin[x.battle] === 'win') teruteru++;
             break;
         }
     });
-    $('#percentage-murabito').text(Math.floor(murabito / length * 100) + '%');
-    $('#percentage-jinrou').text(Math.floor(jinrou / length * 100) + '%');
-    $('#percentage-kaitou').text(Math.floor(kaitou / length * 100) + '%');
-    $('#percentage-kyoujin').text(Math.floor(kyoujin / length * 100) + '%');
-    $('#percentage-uranaishi').text(Math.floor(uranaishi / length * 100) + '%');
-    $('#percentage-teruteru').text(Math.floor(teruteru / length * 100) + '%');
+    $('#percentage-murabito').text(calcPercent(murabito, murabito_sum));
+    $('#percentage-jinrou').text(calcPercent(jinrou, jinrou_sum));
+    $('#percentage-kaitou').text(calcPercent(kaitou, kaitou_sum));
+    $('#percentage-kyoujin').text(calcPercent(kyoujin, kyoujin_sum));
+    $('#percentage-uranaishi').text(calcPercent(uranaishi, uranaishi_sum));
+    $('#percentage-teruteru').text(calcPercent(teruteru, teruteru_sum));
 }
 
 // form validation
