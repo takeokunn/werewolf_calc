@@ -80,6 +80,14 @@ const adaptPercentage = function() {
     $('#percentage-teruteru').text(calcPercent(teruteru, teruteru_sum));
 }
 
+$(document).ready(function(){
+    state_array = JSON.parse(localStorage.getItem('jinrou_app'));
+    state_array.map(function(x) {
+        addTableColumn(x.id, role[x.role], isWin[x.battle]);
+    })
+    adaptPercentage();
+});
+
 // form validation
 $('.form-control').change(function() {
     const input_role = $('#role').val();
@@ -104,6 +112,8 @@ $('#add').on('click', function() {
     });
     id++;
     adaptPercentage();
+
+    localStorage.setItem('jinrou_app', JSON.stringify(state_array));
 });
 
 // delete
