@@ -1,5 +1,4 @@
-var id = 1;
-var state_array = [];
+var id, state_array = [];
 
 const role = {
     'murabito': '村人',
@@ -15,6 +14,11 @@ const isWin = {
     2: 'lose'
 }
 
+const storage = function(arr, id) {
+    localStorage.setItem('jinrou_app', JSON.stringify(arr));
+    localStorage.setItem('jinrou_id', JSON.stringify(id));
+}
+
 const addTableColumn = function(id, role, battle) {
     const tbl = `
         <tr>
@@ -27,13 +31,16 @@ const addTableColumn = function(id, role, battle) {
             <td>
                 ${battle}
             </td>
+            <td>
+                <input id=${id} type="button" class="btn btn-danger" value="削除">
+            </td>
         </tr>
     `;
     $('table > tbody > tr:first').before(tbl);
 };
 
 const removeAllTableColumn = function() {
-    $('table > tbody > tr').remove();
+    $('table > tbody').empty();
     $('table > tbody').append('<tr></tr>');
 }
 
@@ -82,6 +89,7 @@ const adaptPercentage = function() {
 }
 
 $(document).ready(function(){
+    id = localStorage.getItem('jinrou_id') != null? parseInt(localStorage.getItem('jinrou_id')) : 1;
     state_array = JSON.parse(localStorage.getItem('jinrou_app'));
     state_array.map(function(x) {
         addTableColumn(x.id, role[x.role], isWin[x.battle]);
@@ -101,32 +109,39 @@ $('.form-control').change(function() {
     }
 })
 
-// form
+// add form
 $('#add').on('click', function() {
     const input_role = $('#role').val();
     const input_battle = $('#battle').val();
     addTableColumn(id, role[input_role], isWin[input_battle]);
     state_array.push({
-        id: id,
+        id: parseInt(id),
         role: input_role,
         battle: input_battle
     });
     id++;
     adaptPercentage();
-
-    localStorage.setItem('jinrou_app', JSON.stringify(state_array));
+    storage(state_array, id);
 });
 
+// clear all state
 $('#clear').on('click', function() {
-    if(confirm("ログを削除してもよろしいでしょうか？")) {
-        state_array = [];
-        localStorage.setItem('jinrou_app', JSON.stringify(state_array));
-        removeAllTableColumn();
-        adaptPercentage();
-    }
+    if(!confirm("ログを全部削除してもよろしいでしょうか？")) return;
+    state_array = [];
+    id = 1;
+    storage(state_array, 1);
+    removeAllTableColumn();
+    adaptPercentage();
 });
 
-// delete
+// delete table
 $('tbody').on('click', '.btn-danger', function() {
-    console.log($(this)[0].id)
+    if(!confirm('ログを削除してもよろしいでしょうか？')) return;
+    const state_id = parseInt($(this)[0].id);
+    $(this).parent().parent().remove();
+    state_array = state_array.filter(function(obj) {
+        return obj.id !== state_id;
+    });
+    storage(state_array, id);
+    adaptPercentage();
 });
