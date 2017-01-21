@@ -32,8 +32,9 @@ const addTableColumn = function(id, role, battle) {
     $('table > tbody tr:first').before(tbl);
 };
 
-const removeTableColumn = function(id) {
-
+const removeAllTableColumn = function() {
+    $('table > tbody').remove();
+    $('table > tbody').append('<tr></tr>');
 }
 
 const calcPercent = function(win_num, sum_sum) {
@@ -44,6 +45,7 @@ const calcPercent = function(win_num, sum_sum) {
 const adaptPercentage = function() {
     var murabito = jinrou = kaitou = kyoujin = uranaishi = teruteru = 0;
     var murabito_sum = jinrou_sum = kaitou_sum = kyoujin_sum = uranaishi_sum = teruteru_sum = 0;
+    console.log(state_array);
     state_array.map(function(x) {
         switch (x.role) {
         case 'murabito':
@@ -114,6 +116,15 @@ $('#add').on('click', function() {
     adaptPercentage();
 
     localStorage.setItem('jinrou_app', JSON.stringify(state_array));
+});
+
+$('#clear').on('click', function() {
+    if(confirm("ログを削除してもよろしいでしょうか？")) {
+        state_array = [];
+        localStorage.setItem('jinrou_app', JSON.stringify(state_array));
+        removeAllTableColumn();
+        adaptPercentage();
+    }
 });
 
 // delete
