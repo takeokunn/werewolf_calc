@@ -39,7 +39,7 @@
          */
         get stateArray() {
             const app = localStorage.getItem('jinrou_app');
-            return (null === app) ? [] : JSON.parse(app);
+            return app || JSON.parse(app);
         }
         set stateArray(arr) {
             localStorage.setItem('jinrou_app', JSON.stringify(arr));
