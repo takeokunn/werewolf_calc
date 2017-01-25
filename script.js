@@ -95,11 +95,11 @@
                 </td>
             </tr>
         `;
-        $('table > tbody > tr:first').before(tbl);
+        $('#logTableBody').prepend(tbl);
     }
 
     function removeAllTableColumn() {
-        $('table > tbody').empty().append('<tr></tr>');
+        $('#logTableBody').empty().append('<tr></tr>');
     }
 
     /**
