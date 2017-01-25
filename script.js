@@ -1,147 +1,188 @@
-var id, state_array = [];
+(function() {
+    'use strict';
 
-const role = {
-    'murabito': '村人',
-    'jinrou': '人狼',
-    'kaitou': '怪盗',
-    'kyoujin': '狂人',
-    'uranaishi': '占い師',
-    'teruteru': 'てるてる'
-}
+    /**
+     * @callback StorageManager~removeIfCallback
+     * @param obj {any} An element of array
+     * @returns {boolean}
+     */
 
-const isWin = {
-    1: 'win',
-    2: 'lose'
-}
+    /**
+     * @brief detect variable type
+     * @detail
+     * JavaScriptでオブジェクトの型を判別するのにtypeof演算子使うとツラいよね - Qiita
+     * http://qiita.com/Layzie/items/465e715dae14e2f601de
+     * @param type {string} 'String', 'Number', 'Boolean', 'Date', 'Error', 'Array', 'Function', 'RegExp', 'Object'
+     * @param obj {any} target variable
+     * @returns {boolean}
+     */
+    const is = function(type, obj) {
+        const clas = Object.prototype.toString.call(obj).slice(8, -1);
+        return obj !== undefined && obj !== null && clas === type;
+    };
 
-const storage = function(arr, id) {
-    localStorage.setItem('jinrou_app', JSON.stringify(arr));
-    localStorage.setItem('jinrou_id', JSON.stringify(id));
-}
-
-const addTableColumn = function(id, role, battle) {
-    const tbl = `
-        <tr>
-            <td>
-                ${id}
-            </td>
-            <td>
-                ${role}
-            </td>
-            <td>
-                ${battle}
-            </td>
-            <td>
-                <input id=${id} type="button" class="btn btn-danger" value="削除">
-            </td>
-        </tr>
-    `;
-    $('table > tbody > tr:first').before(tbl);
-};
-
-const removeAllTableColumn = function() {
-    $('table > tbody').empty();
-    $('table > tbody').append('<tr></tr>');
-}
-
-const calcPercent = function(win_num, sum_sum) {
-    var tmp = Math.floor(win_num / sum_sum * 100);
-    return isNaN(tmp)? 0 + '%' : tmp + '%';
-}
-
-const adaptPercentage = function() {
-    var murabito = jinrou = kaitou = kyoujin = uranaishi = teruteru = 0;
-    var murabito_sum = jinrou_sum = kaitou_sum = kyoujin_sum = uranaishi_sum = teruteru_sum = 0;
-    state_array.map(function(x) {
-        switch (x.role) {
-        case 'murabito':
-            murabito_sum++;
-            if(isWin[x.battle] === 'win') murabito++;
-            break;
-        case 'jinrou':
-            jinrou_sum++;
-            if(isWin[x.battle] === 'win') jinrou++;
-            break;
-        case 'kaitou':
-            kaitou_sum++;
-            if(isWin[x.battle] === 'win') kaitou++;
-            break;
-        case 'kyoujin':
-            kyoujin_sum++;
-            if(isWin[x.battle] === 'win') kyoujin++;
-            break;
-        case 'uranaishi':
-            uranaishi_sum++;
-            if(isWin[x.battle] === 'win') uranaishi++;
-            break;
-        case 'teruteru':
-            teruteru_sum++;
-            if(isWin[x.battle] === 'win') teruteru++;
-            break;
+    class StorageManager {
+        get id() {
+            const re = localStorage.getItem('jinrou_id');
+            // check null or undefined
+            if (null == re) {
+                localStorage.setItem('jinrou_id', (0).toString());
+                return 0;
+            }
+            return parseInt(re, 10);
         }
-    });
-    $('#percentage-murabito').text(calcPercent(murabito, murabito_sum));
-    $('#percentage-jinrou').text(calcPercent(jinrou, jinrou_sum));
-    $('#percentage-kaitou').text(calcPercent(kaitou, kaitou_sum));
-    $('#percentage-kyoujin').text(calcPercent(kyoujin, kyoujin_sum));
-    $('#percentage-uranaishi').text(calcPercent(uranaishi, uranaishi_sum));
-    $('#percentage-teruteru').text(calcPercent(teruteru, teruteru_sum));
-}
-
-$(document).ready(function(){
-    id = localStorage.getItem('jinrou_id') != null? parseInt(localStorage.getItem('jinrou_id')) : 1;
-    state_array = JSON.parse(localStorage.getItem('jinrou_app'));
-    state_array.map(function(x) {
-        addTableColumn(x.id, role[x.role], isWin[x.battle]);
-    })
-    adaptPercentage();
-});
-
-// form validation
-$('.form-control').change(function() {
-    const input_role = $('#role').val();
-    const input_battle = $('#battle').val();
-    if(input_role == 0 || input_battle == 0) {
-        $("#add").prop("disabled", true);
+        set id(n) {
+            if (is('Number', n)) localStorage.setItem('jinrou_id', (n).toString());
+        }
+        /**
+         * @returns {any[]}
+         */
+        get stateArray() {
+            const app = localStorage.getItem('jinrou_app');
+            return (null === app) ? [] : JSON.parse(app);
+        }
+        set stateArray(arr) {
+            localStorage.setItem('jinrou_app', JSON.stringify(arr));
+        }
+        /**
+         * @brief push element to stateArray
+         * @param e {any} element
+         */
+        push(e) {
+            const arr = this.stateArray;
+            arr.push(e);
+            // call setter explicitly
+            this.stateArray = arr;
+            ++this.id;
+        }
+        /**
+         * @brief remove if callback returns true.
+         * @param f {StorageManager~removeIfCallback}
+         */
+        removeIf(f) {
+            this.stateArray = this.stateArray.filter(f);
+        }
+        /**
+         * @brief clear storage
+         */
+        clear() {
+            localStorage.removeItem('jinrou_id');
+            localStorage.removeItem('jinrou_app');
+        }
     }
-    else {
-        $("#add").prop("disabled", false);
-    }
-})
 
-// add form
-$('#add').on('click', function() {
-    const input_role = $('#role').val();
-    const input_battle = $('#battle').val();
-    addTableColumn(id, role[input_role], isWin[input_battle]);
-    state_array.push({
-        id: parseInt(id),
-        role: input_role,
-        battle: input_battle
+    const storage = new StorageManager();
+
+    const localizeRole = {
+        'murabito':  '村人',
+        'jinrou':    '人狼',
+        'kaitou':    '怪盗',
+        'kyoujin':   '狂人',
+        'uranaishi': '占い師',
+        'teruteru':  'てるてる',
+    };
+
+    const isWin = {
+        1: 'win',
+        2: 'lose',
+    };
+
+    const addTableColumn = function(id, localizedRole, battle) {
+        const tbl = `
+            <tr>
+                <td>
+                    ${id}
+                </td>
+                <td>
+                    ${localizedRole}
+                </td>
+                <td>
+                    ${battle}
+                </td>
+                <td>
+                    <input id=${id} type='button' class='btn btn-danger' value='削除'>
+                </td>
+            </tr>
+        `;
+        $('#logTableBody').prepend(tbl);
+    };
+
+    const removeAllTableColumn = function() {
+        $('#logTableBody').empty().append('<tr></tr>');
+    };
+
+    /**
+     * @param winNum {number}
+     * @param sum {number}
+     */
+    const calcPercent = function(winNum, sum) {
+        const nanable = Math.floor(winNum / sum * 100);
+        return (isNaN(nanable) ? 0 : nanable) + '%';
+    };
+
+    const adaptPercentage = function() {
+        const roles = {
+            'murabito':  {num: 0, sum: 0},
+            'jinrou':    {num: 0, sum: 0},
+            'kaitou':    {num: 0, sum: 0},
+            'kyoujin':   {num: 0, sum: 0},
+            'uranaishi': {num: 0, sum: 0},
+            'teruteru':  {num: 0, sum: 0},
+        };
+        for (let x of storage.stateArray) { // eslint-disable-line no-alert, prefer-const
+            roles[x.role].sum++;
+            if (isWin[x.battle] === 'win') roles[x.role].num++;
+        }
+        Object.keys(roles).forEach(
+            r => $('#percentage-' + r).text(calcPercent(roles[r].num, roles[r].sum))
+        );
+    };
+
+    $(document).ready(() => {
+        for (let x of storage.stateArray) { // eslint-disable-line no-alert, prefer-const
+            addTableColumn(x.id, localizeRole[x.role], isWin[x.battle]);
+        }
+        adaptPercentage();
     });
-    id++;
-    adaptPercentage();
-    storage(state_array, id);
-});
 
-// clear all state
-$('#clear').on('click', function() {
-    if(!confirm("ログを全部削除してもよろしいでしょうか？")) return;
-    state_array = [];
-    id = 1;
-    storage(state_array, 1);
-    removeAllTableColumn();
-    adaptPercentage();
-});
-
-// delete table
-$('tbody').on('click', '.btn-danger', function() {
-    if(!confirm('ログを削除してもよろしいでしょうか？')) return;
-    const state_id = parseInt($(this)[0].id);
-    $(this).parent().parent().remove();
-    state_array = state_array.filter(function(obj) {
-        return obj.id !== state_id;
+    // form validation
+    $('.form-control').change(() => {
+        /** @type {string} */
+        const inputRole = $('#role').val();
+        /** @type {string} */
+        const inputBattle = $('#battle').val();
+        $('#add').prop('disabled', (inputRole == 0 || inputBattle == 0));
     });
-    storage(state_array, id);
-    adaptPercentage();
-});
+
+    // add form
+    $('#add').on('click', () => {
+        /** @type {string} */
+        const inputRole = $('#role').val();
+        /** @type {string} */
+        const inputBattle = $('#battle').val();
+        addTableColumn(storage.id, localizeRole[inputRole], isWin[inputBattle]);
+        storage.push({
+            id:     storage.id,
+            role:   inputRole,
+            battle: inputBattle,
+        });
+        adaptPercentage();
+    });
+
+    // clear all state
+    $('#clear').on('click', () => {
+        if (!confirm('ログを全部削除してもよろしいでしょうか？')) return;
+        storage.clear();
+        removeAllTableColumn();
+        adaptPercentage();
+    });
+
+    // delete table
+    $('tbody').on('click', '.btn-danger', function() {
+        if (!confirm('ログを削除してもよろしいでしょうか？')) return;
+        const stateId = parseInt($(this)[0].id, 10);
+        $(this).parent().parent().remove();
+        storage.removeIf(obj => obj.id !== stateId);
+        adaptPercentage();
+    });
+}());
