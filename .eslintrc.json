@@ -20,7 +20,7 @@
 		"func-name-matching":          ["warn", "never"],
 		"func-names":                  ["warn", "never"],
 		"func-style":                  [
-			"warn", "declaration", {"allowArrowFunctions": true}
+			"warn", "expression", {"allowArrowFunctions": true}
 		],
 		"global-require":              "off",
 		"id-length":                   "off",

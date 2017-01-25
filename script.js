@@ -16,10 +16,10 @@
      * @param obj {any} target variable
      * @returns {boolean}
      */
-    function is(type, obj) {
+    const is = function(type, obj) {
         const clas = Object.prototype.toString.call(obj).slice(8, -1);
         return obj !== undefined && obj !== null && clas === type;
-    }
+    };
 
     class StorageManager {
         get id() {
@@ -87,7 +87,7 @@
         2: 'lose',
     };
 
-    function addTableColumn(id, localizedRole, battle) {
+    const addTableColumn = function(id, localizedRole, battle) {
         const tbl = `
             <tr>
                 <td>
@@ -105,22 +105,22 @@
             </tr>
         `;
         $('#logTableBody').prepend(tbl);
-    }
+    };
 
-    function removeAllTableColumn() {
+    const removeAllTableColumn = function() {
         $('#logTableBody').empty().append('<tr></tr>');
-    }
+    };
 
     /**
      * @param winNum {number}
      * @param sum {number}
      */
-    function calcPercent(winNum, sum) {
+    const calcPercent = function(winNum, sum) {
         const nanable = Math.floor(winNum / sum * 100);
         return (isNaN(nanable) ? 0 : nanable) + '%';
-    }
+    };
 
-    function adaptPercentage() {
+    const adaptPercentage = function() {
         const roles = {
             'murabito':  {num: 0, sum: 0},
             'jinrou':    {num: 0, sum: 0},
@@ -136,7 +136,7 @@
         Object.keys(roles).forEach(
             r => $('#percentage-' + r).text(calcPercent(roles[r].num, roles[r].sum))
         );
-    }
+    };
 
     $(document).ready(() => {
         for (let x of storage.stateArray) { // eslint-disable-line no-alert, prefer-const
