@@ -7,6 +7,15 @@
      * @returns {boolean}
      */
 
+    /**
+     * @brief detect variable type
+     * @detail
+     * JavaScriptでオブジェクトの型を判別するのにtypeof演算子使うとツラいよね - Qiita
+     * http://qiita.com/Layzie/items/465e715dae14e2f601de
+     * @param type {string} 'String', 'Number', 'Boolean', 'Date', 'Error', 'Array', 'Function', 'RegExp', 'Object'
+     * @param obj {any} target variable
+     * @returns {boolean}
+     */
     function is(type, obj) {
         const clas = Object.prototype.toString.call(obj).slice(8, -1);
         return obj !== undefined && obj !== null && clas === type;
