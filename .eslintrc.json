@@ -27,6 +27,7 @@
 		"indent":                      ["warn", 4],
 		"init-declarations":           "off",
 		"key-spacing":                 ["warn", {"align": "value"}],
+		"linebreak-style":             "off",
 		"lines-around-comment":        "off",
 		"max-len":                     "off",
 		"max-lines":                   "off",
