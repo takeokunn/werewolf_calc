@@ -117,7 +117,7 @@
      */
     function calcPercent(winNum, sum) {
         const tmp = Math.floor(winNum / sum * 100);
-        return isNaN(tmp)? 0 + '%' : tmp + '%';
+        return (isNaN(tmp) ? 0 : tmp) + '%';
     }
 
     function adaptPercentage() {
