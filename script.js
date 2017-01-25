@@ -116,8 +116,8 @@
      * @param sum {number}
      */
     function calcPercent(winNum, sum) {
-        const tmp = Math.floor(winNum / sum * 100);
-        return (isNaN(tmp) ? 0 : tmp) + '%';
+        const nanable = Math.floor(winNum / sum * 100);
+        return (isNaN(nanable) ? 0 : nanable) + '%';
     }
 
     function adaptPercentage() {
