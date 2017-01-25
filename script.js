@@ -138,26 +138,18 @@
 
     // form validation
     $('.form-control').change(() => {
-        /**
-         * @type {string|number}
-         */
+        /** @type {string} */
         const inputRole = $('#role').val();
-        /**
-         * @type {string|number}
-         */
+        /** @type {string} */
         const inputBattle = $('#battle').val();
         $('#add').prop('disabled', (inputRole == 0 || inputBattle == 0));
     });
 
     // add form
     $('#add').on('click', () => {
-        /**
-         * @type {string}
-         */
+        /** @type {string} */
         const inputRole = $('#role').val();
-        /**
-         * @type {string}
-         */
+        /** @type {string} */
         const inputBattle = $('#battle').val();
         addTableColumn(storage.id, localizeRole[inputRole], isWin[inputBattle]);
         storage.push({
